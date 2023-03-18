@@ -9,5 +9,5 @@ A simple users library. (at start adding random 10 users from an outside api <br
 ## Technologies
 React, Vite, MUI, Redux(toolkit), eslint, framer motion, react query
 ## Images
-![Home Page](https://www.linkpicture.com/q/download-3_53.png)
-![PopUp Example](https://www.linkpicture.com/q/download-4_38.png)
+![Home Page](https://www.linkpicture.com/q/download-5.png)
+![PopUp Example](https://www.linkpicture.com/q/download-6_17.png)
