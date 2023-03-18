@@ -1,4 +1,3 @@
-import { User } from '../interfaces/user.interface'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -7,14 +6,10 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Button } from '@mui/material'
+import { useAppSelector } from '../../hooks/redux'
 
-interface Props {
-    users: Array<User>
-    isLoading: boolean
-}
-
-const UsersList = (props: Props) => {
-    if (props.isLoading) return <div>Loading...</div>
+const UsersList = () => {
+    const users = useAppSelector((state) => state.users)
     return (
         <TableContainer component={Paper}>
             <Table
@@ -33,7 +28,7 @@ const UsersList = (props: Props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.users.map((user) => (
+                    {users.map((user) => (
                         <TableRow key={user.id}>
                             <TableCell
                                 component="th"
@@ -57,6 +52,7 @@ const UsersList = (props: Props) => {
                                 <img
                                     src={user.image}
                                     title={user.name + ' image'}
+                                    alt={user.name + ' image'}
                                 />
                             </TableCell>
                             <TableCell align="center">

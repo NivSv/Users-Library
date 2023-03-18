@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import axios from 'axios'
 import Home from './pages/Home'
-
-// Create a client
-const queryClient = new QueryClient()
+import { useAppDispatch } from './hooks/redux'
+import { User } from './interfaces/user.interface'
+import { setUsers } from './redux/usersSlice'
 
 const theme = createTheme({
     typography: {
@@ -17,12 +19,34 @@ const theme = createTheme({
 })
 
 function App() {
+    const dispatch = useAppDispatch()
+    const { isLoading, data, isError } = useQuery('users', async () => {
+        const foundUsers = await axios('https://randomuser.me/api/?results=10')
+        return foundUsers.data.results
+    })
+
+    useEffect(() => {
+        if (data) {
+            const newUsers: Array<User> = data.map((foundUser: any) => {
+                return {
+                    id: foundUser.login.uuid,
+                    name: `${foundUser.name.first} ${foundUser.name.last}`,
+                    email: foundUser.email,
+                    image: foundUser.picture.medium,
+                    location: `${foundUser.location.country}, ${foundUser.location.city}, ${foundUser.location.street.name} ${foundUser.location.street.number}`,
+                }
+            })
+            dispatch(setUsers(newUsers))
+        }
+        return () => {
+            dispatch(setUsers([]))
+        }
+    }, [data])
+
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={theme}>
-                <Home />
-            </ThemeProvider>
-        </QueryClientProvider>
+        <ThemeProvider theme={theme}>
+            <Home />
+        </ThemeProvider>
     )
 }
 

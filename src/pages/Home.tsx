@@ -1,46 +1,15 @@
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
-import axios from 'axios'
-import setUsers from '../redux/usersSlice'
-import { User } from '../interfaces/user.interface'
-import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { useState } from 'react'
 import Container from '@mui/material/Container'
 import { Button, TextField } from '@mui/material'
-import UsersList from '../components/UsersList'
+import UsersList from '../components/UserList'
 import { motion } from 'framer-motion'
 import { fadeIn, textVariant } from '../utils/motion'
+import CreateUserModal from '../components/CreateUserModal'
 
 type Props = {}
 
 const Home = (props: Props) => {
-    // const users = useAppSelector((state) => state.users)
-    const dispatch = useAppDispatch()
-    const { isLoading, data, isError } = useQuery('users', async () => {
-        const foundUsers = await axios('https://randomuser.me/api/?results=10')
-        return foundUsers.data.results
-    })
-    const [users, setUsers] = useState<Array<User>>([])
-
-    useEffect(() => {
-        if (data) {
-            const newUsers: Array<User> = data.map((foundUser: any) => {
-                return {
-                    id: foundUser.login.uuid,
-                    name: `${foundUser.name.first} ${foundUser.name.last}`,
-                    email: foundUser.email,
-                    image: foundUser.picture.medium,
-                    location: `${foundUser.location.country}, ${foundUser.location.city}, ${foundUser.location.street.name} ${foundUser.location.street.number}`,
-                }
-            })
-            setUsers(newUsers)
-            // dispatch(setUsers(newUsers))
-        }
-        return () => {}
-    }, [data])
-
-    useEffect(() => {
-        console.log(users)
-    }, [users])
+    const [addUserModal, setAddUserModal] = useState<boolean>(false)
 
     return (
         <Container
@@ -87,6 +56,9 @@ const Home = (props: Props) => {
                         variant="contained"
                         color="success"
                         sx={{ maxHeight: '35px' }}
+                        onClick={() => {
+                            setAddUserModal(!addUserModal)
+                        }}
                     >
                         Add User
                     </Button>
@@ -108,7 +80,13 @@ const Home = (props: Props) => {
                     />
                 </motion.div>
             </div>
-            <UsersList users={users} isLoading={isLoading} />
+            <UsersList />
+            <CreateUserModal
+                isOpen={addUserModal}
+                handleClose={() => {
+                    setAddUserModal(!addUserModal)
+                }}
+            />
         </Container>
     )
 }
