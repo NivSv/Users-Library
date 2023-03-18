@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import Container from '@mui/material/Container'
 import { Button, TextField } from '@mui/material'
-import UsersList from '../components/UserList'
+import UsersList from '@/pages/Home/components/UserList'
 import { motion } from 'framer-motion'
-import { fadeIn, textVariant } from '../utils/motion'
-import CreateUserModal from '../components/CreateUserModal'
+import { fadeIn, textVariant } from '@/utils/motion'
+import CreateUserModal from '@/pages/Home/components/CreateUserModal'
 
 const Home = () => {
     const [addUserModal, setAddUserModal] = useState<boolean>(false)
@@ -54,7 +54,7 @@ const Home = () => {
                 >
                     <Button
                         variant="contained"
-                        color="success"
+                        color="primary"
                         sx={{ maxHeight: '35px' }}
                         onClick={() => {
                             setAddUserModal(!addUserModal)

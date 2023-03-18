@@ -18,7 +18,12 @@
         "baseUrl": ".",
         "paths": {
             "@assets/*": ["./src/assets/*"],
-            "@/components/*": ["./src/components/*"]
+            "@/components/*": ["./src/components/*"],
+            "@/pages/*": ["./src/pages/*"],
+            "@/utils/*": ["./src/utils/*"],
+            "@/redux/*": ["./src/redux/*"],
+            "@/interfaces/*": ["./src/interfaces/*"],
+            "@/hooks/*": ["./src/hooks/*"]
         }
     },
     "include": ["src"],

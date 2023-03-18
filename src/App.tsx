@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { useQuery } from 'react-query'
-import axios from 'axios'
-import Home from './pages/Home'
-import { useAppDispatch, useAppSelector } from './hooks/redux'
-import { User } from './interfaces/user.interface'
-import { setUsers } from './redux/usersSlice'
+import Home from '@/pages/Home/Home'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux'
+import { User } from '@/interfaces/user.interface'
+import { setUsers } from '@/redux/usersSlice'
 import { green } from '@mui/material/colors'
+import { fetchUsers } from './api/fetchUsers.api'
 
 const theme = createTheme({
     typography: {
@@ -14,7 +14,10 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#747274',
+            main: '#865DFF',
+        },
+        secondary: {
+            main: '#191825',
         },
         success: {
             main: green[600],
@@ -25,14 +28,11 @@ const theme = createTheme({
 function App() {
     const users = useAppSelector((state) => state.users)
     const dispatch = useAppDispatch()
-    const { data, isError } = useQuery('users', async () => {
-        const foundUsers = await axios('https://randomuser.me/api/?results=10')
-        return foundUsers.data.results
-    })
+    const { data } = useQuery('users', fetchUsers)
 
     useEffect(() => {
         if (data && users.length === 0) {
-            const newUsers: Array<User> = data.map((foundUser: any) => {
+            const newUsers: Array<User> = data.map((foundUser) => {
                 return {
                     id: foundUser.login.uuid,
                     name: `${foundUser.name.first} ${foundUser.name.last}`,

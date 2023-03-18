@@ -1,31 +1,14 @@
-import { Modal, TextField } from '@mui/material'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import { useAppDispatch, useAppSelector } from '../../hooks/redux'
-import { addUser } from '../../redux/usersSlice'
+import ModalWrapper from '@/components/ModalWrapper'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useRef, useState } from 'react'
+import { ErrorType } from '@/interfaces/error.interface'
+import { addUser } from '../../../redux/usersSlice'
 import { v4 as uuidv4 } from 'uuid'
+import { TextField, Typography } from '@mui/material'
 
 interface Props {
     isOpen: boolean
     handleClose: () => void
-}
-
-interface ErrorType {
-    ErrorType: 'name' | 'email' | 'location' | 'image' | null
-    message: string
-}
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '14rem',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
 }
 
 const CreateUserModal = (props: Props) => {
@@ -87,16 +70,20 @@ const CreateUserModal = (props: Props) => {
     }
 
     return (
-        <Modal
-            open={props.isOpen}
-            onClose={props.handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+        <ModalWrapper
+            isOpen={props.isOpen}
+            // eslint-disable-next-line react/no-children-prop
+            buttons={[
+                {
+                    text: 'Save',
+                    onClick: handleSave,
+                    color: 'primary',
+                },
+            ]}
+            title="Create User"
+            handleClose={props.handleClose}
         >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Create User
-                </Typography>
+            <div>
                 <div
                     style={{
                         display: 'flex',
@@ -133,26 +120,8 @@ const CreateUserModal = (props: Props) => {
                         {error.message}
                     </Typography>
                 )}
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <Button
-                        onClick={handleSave}
-                        onKeyDown={handleSave}
-                        variant="contained"
-                        color="success"
-                    >
-                        <Typography>Create</Typography>
-                    </Button>
-                    <Button
-                        onClick={props.handleClose}
-                        onKeyDown={props.handleClose}
-                        variant="contained"
-                        color="warning"
-                    >
-                        <Typography>Cancel</Typography>
-                    </Button>
-                </div>
-            </Box>
-        </Modal>
+            </div>
+        </ModalWrapper>
     )
 }
 

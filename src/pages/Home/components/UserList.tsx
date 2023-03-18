@@ -5,11 +5,11 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { Button } from '@mui/material'
-import { useAppSelector } from '../../hooks/redux'
-import DeleteUserModal from '../DeleteUserModal'
+import { useAppSelector } from '@/hooks/redux'
+import DeleteUserModal from '@/pages/Home/components/DeleteUserModal'
 import { useState } from 'react'
-import EditUserModal from '../EditUserModal'
+import EditUserModal from '@/pages/Home/components/EditUserModal'
+import MenuListWrapper from '@/components/MenuListWrapper'
 
 interface Props {
     filter: string
@@ -101,15 +101,43 @@ const UsersList = (props: Props) => {
                                             gap: '3px',
                                         }}
                                     >
-                                        <Button
+                                        <MenuListWrapper
+                                            title="Actions"
+                                            menuList={[
+                                                {
+                                                    title: 'Edit',
+                                                    onClick: () =>
+                                                        setSelectedEditUser(
+                                                            user.id
+                                                        ),
+                                                },
+                                                {
+                                                    title: 'Delete',
+                                                    onClick: () =>
+                                                        setSelectedDeleteUser(
+                                                            user.id
+                                                        ),
+                                                },
+                                            ]}
+                                        />
+                                        {/* <Button
                                             variant="contained"
-                                            color="primary"
+                                            color="secondary"
+                                            onClick={() =>
+                                                setSelectedEditUser(user.id)
+                                            }
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            color="secondary"
                                             onClick={() =>
                                                 setSelectedDeleteUser(user.id)
                                             }
                                         >
                                             Delete
-                                        </Button>
+                                        </Button> */}
                                         <DeleteUserModal
                                             isOpen={
                                                 selectedDeleteUser === user.id
@@ -119,15 +147,6 @@ const UsersList = (props: Props) => {
                                                 setSelectedDeleteUser('')
                                             }
                                         />
-                                        <Button
-                                            variant="contained"
-                                            color="info"
-                                            onClick={() =>
-                                                setSelectedEditUser(user.id)
-                                            }
-                                        >
-                                            Edit
-                                        </Button>
                                         <EditUserModal
                                             isOpen={
                                                 selectedEditUser === user.id
