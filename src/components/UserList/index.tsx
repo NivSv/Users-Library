@@ -7,9 +7,12 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Button } from '@mui/material'
 import { useAppSelector } from '../../hooks/redux'
+import DeleteUserModal from '../DeleteUserModal'
+import { useState } from 'react'
 
 const UsersList = () => {
     const users = useAppSelector((state) => state.users)
+    const [selectedDeleteUser, setSelectedDeleteUser] = useState<string>('')
     return (
         <TableContainer component={Paper}>
             <Table
@@ -64,9 +67,22 @@ const UsersList = () => {
                                         gap: '3px',
                                     }}
                                 >
-                                    <Button variant="contained" color="error">
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() =>
+                                            setSelectedDeleteUser(user.id)
+                                        }
+                                    >
                                         Delete
                                     </Button>
+                                    <DeleteUserModal
+                                        isOpen={selectedDeleteUser === user.id}
+                                        user={user}
+                                        handleClose={() =>
+                                            setSelectedDeleteUser('')
+                                        }
+                                    />
                                     <Button variant="contained" color="info">
                                         Edit
                                     </Button>
