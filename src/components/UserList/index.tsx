@@ -10,6 +10,13 @@ import { useAppSelector } from '../../hooks/redux'
 import DeleteUserModal from '../DeleteUserModal'
 import { useState } from 'react'
 
+const boxSX = {
+    '&:hover': {
+        color: 'gray',
+        backgroundColor: '#e2dadb',
+    },
+}
+
 const UsersList = () => {
     const users = useAppSelector((state) => state.users)
     const [selectedDeleteUser, setSelectedDeleteUser] = useState<string>('')
@@ -23,22 +30,30 @@ const UsersList = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">ID</TableCell>
+                        <TableCell align="center">Image</TableCell>
                         <TableCell align="center">Name</TableCell>
-                        <TableCell align="center">email</TableCell>
-                        <TableCell align="center">location</TableCell>
-                        <TableCell align="center">image</TableCell>
+                        <TableCell align="center">Email</TableCell>
+                        <TableCell align="center">Location</TableCell>
                         <TableCell align="center"></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {users.map((user) => (
-                        <TableRow key={user.id}>
+                        <TableRow key={user.id} sx={boxSX}>
                             <TableCell
                                 component="th"
                                 scope="row"
                                 align="center"
                             >
                                 {user.id}
+                            </TableCell>
+                            <TableCell align="center">
+                                <img
+                                    width={70}
+                                    src={user.image}
+                                    title={user.name + ' image'}
+                                    alt={user.name + ' image'}
+                                />
                             </TableCell>
                             <TableCell
                                 component="th"
@@ -50,14 +65,6 @@ const UsersList = () => {
                             <TableCell align="center">{user.email}</TableCell>
                             <TableCell align="center">
                                 {user.location}
-                            </TableCell>
-                            <TableCell align="center">
-                                <img
-                                    width={70}
-                                    src={user.image}
-                                    title={user.name + ' image'}
-                                    alt={user.name + ' image'}
-                                />
                             </TableCell>
                             <TableCell align="center">
                                 <div

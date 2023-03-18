@@ -10,7 +10,7 @@
 html {
     scroll-behavior: smooth;
     background-color: var(--background);
-    font-family: 'Assistant', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 body::-webkit-scrollbar {

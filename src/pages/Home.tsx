@@ -29,7 +29,7 @@ const Home = () => {
                     paddingBottom: '1rem',
                 }}
             >
-                User Library
+                Users Library
             </motion.h1>
             <div
                 style={{

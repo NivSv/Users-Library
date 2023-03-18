@@ -9,7 +9,7 @@ import { setUsers } from './redux/usersSlice'
 
 const theme = createTheme({
     typography: {
-        fontFamily: 'Assistant',
+        fontFamily: 'Lato',
     },
     palette: {
         primary: {
