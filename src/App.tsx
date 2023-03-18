@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import { useAppDispatch, useAppSelector } from './hooks/redux'
 import { User } from './interfaces/user.interface'
 import { setUsers } from './redux/usersSlice'
+import { green } from '@mui/material/colors'
 
 const theme = createTheme({
     typography: {
@@ -14,6 +15,9 @@ const theme = createTheme({
     palette: {
         primary: {
             main: '#747274',
+        },
+        success: {
+            main: green[600],
         },
     },
 })

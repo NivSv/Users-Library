@@ -9,6 +9,11 @@ import { Button } from '@mui/material'
 import { useAppSelector } from '../../hooks/redux'
 import DeleteUserModal from '../DeleteUserModal'
 import { useState } from 'react'
+import EditUserModal from '../EditUserModal'
+
+interface Props {
+    filter: string
+}
 
 const boxSX = {
     '&:hover': {
@@ -17,9 +22,11 @@ const boxSX = {
     },
 }
 
-const UsersList = () => {
+const UsersList = (props: Props) => {
     const users = useAppSelector((state) => state.users)
     const [selectedDeleteUser, setSelectedDeleteUser] = useState<string>('')
+    const [selectedEditUser, setSelectedEditUser] = useState<string>('')
+
     return (
         <TableContainer component={Paper}>
             <Table
@@ -38,65 +45,102 @@ const UsersList = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user.id} sx={boxSX}>
-                            <TableCell
-                                component="th"
-                                scope="row"
-                                align="center"
-                            >
-                                {user.id}
-                            </TableCell>
-                            <TableCell align="center">
-                                <img
-                                    width={70}
-                                    src={user.image}
-                                    title={user.name + ' image'}
-                                    alt={user.name + ' image'}
-                                />
-                            </TableCell>
-                            <TableCell
-                                component="th"
-                                scope="row"
-                                align="center"
-                            >
-                                {user.name}
-                            </TableCell>
-                            <TableCell align="center">{user.email}</TableCell>
-                            <TableCell align="center">
-                                {user.location}
-                            </TableCell>
-                            <TableCell align="center">
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '3px',
-                                    }}
+                    {users
+                        .filter((user) => {
+                            if (props.filter === '') return true
+                            if (
+                                user.id.toLowerCase().includes(props.filter) ||
+                                user.name
+                                    .toLowerCase()
+                                    .includes(props.filter) ||
+                                user.email
+                                    .toLowerCase()
+                                    .includes(props.filter) ||
+                                user.location
+                                    .toLowerCase()
+                                    .includes(props.filter)
+                            )
+                                return true
+                            return false
+                        })
+                        .map((user) => (
+                            <TableRow key={user.id} sx={boxSX}>
+                                <TableCell
+                                    component="th"
+                                    scope="row"
+                                    align="center"
                                 >
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        onClick={() =>
-                                            setSelectedDeleteUser(user.id)
-                                        }
-                                    >
-                                        Delete
-                                    </Button>
-                                    <DeleteUserModal
-                                        isOpen={selectedDeleteUser === user.id}
-                                        user={user}
-                                        handleClose={() =>
-                                            setSelectedDeleteUser('')
-                                        }
+                                    {user.id}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <img
+                                        width={70}
+                                        src={user.image}
+                                        title={user.name + ' image'}
+                                        alt={user.name + ' image'}
                                     />
-                                    <Button variant="contained" color="info">
-                                        Edit
-                                    </Button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                                </TableCell>
+                                <TableCell
+                                    component="th"
+                                    scope="row"
+                                    align="center"
+                                >
+                                    {user.name}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {user.email}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {user.location}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '3px',
+                                        }}
+                                    >
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() =>
+                                                setSelectedDeleteUser(user.id)
+                                            }
+                                        >
+                                            Delete
+                                        </Button>
+                                        <DeleteUserModal
+                                            isOpen={
+                                                selectedDeleteUser === user.id
+                                            }
+                                            user={user}
+                                            handleClose={() =>
+                                                setSelectedDeleteUser('')
+                                            }
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            color="info"
+                                            onClick={() =>
+                                                setSelectedEditUser(user.id)
+                                            }
+                                        >
+                                            Edit
+                                        </Button>
+                                        <EditUserModal
+                                            isOpen={
+                                                selectedEditUser === user.id
+                                            }
+                                            user={user}
+                                            handleClose={() =>
+                                                setSelectedEditUser('')
+                                            }
+                                        />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
         </TableContainer>

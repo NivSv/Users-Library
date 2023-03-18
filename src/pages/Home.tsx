@@ -8,6 +8,7 @@ import CreateUserModal from '../components/CreateUserModal'
 
 const Home = () => {
     const [addUserModal, setAddUserModal] = useState<boolean>(false)
+    const [filter, setFilter] = useState<string>('')
 
     return (
         <Container
@@ -34,6 +35,7 @@ const Home = () => {
             <div
                 style={{
                     display: 'flex',
+                    flexDirection: 'row',
                     gap: '2rem',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -75,10 +77,13 @@ const Home = () => {
                         id="standard-basic"
                         label="Filter"
                         variant="standard"
+                        onChange={(e) => {
+                            setFilter(e.target.value)
+                        }}
                     />
                 </motion.div>
             </div>
-            <UsersList />
+            <UsersList filter={filter} />
             <CreateUserModal
                 isOpen={addUserModal}
                 handleClose={() => {

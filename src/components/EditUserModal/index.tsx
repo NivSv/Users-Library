@@ -3,12 +3,13 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
-import { addUser } from '../../redux/usersSlice'
-import { useRef, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { addUser, updateUser } from '../../redux/usersSlice'
+import { useEffect, useRef, useState } from 'react'
+import { User } from '../../interfaces/user.interface'
 
 interface Props {
     isOpen: boolean
+    user: User
     handleClose: () => void
 }
 
@@ -28,7 +29,7 @@ const style = {
     p: 4,
 }
 
-const CreateUserModal = (props: Props) => {
+const EditUserModal = (props: Props) => {
     const users = useAppSelector((state) => state.users)
     const dispatch = useAppDispatch()
     const [error, setError] = useState<ErrorType>({
@@ -63,7 +64,13 @@ const CreateUserModal = (props: Props) => {
             })
             return
         }
-        if (users.find((user) => user.email === email.current?.value)) {
+        if (
+            users.find(
+                (user) =>
+                    user.email === email.current?.value &&
+                    user.id !== props.user.id
+            )
+        ) {
             setError({
                 ErrorType: 'email',
                 message: 'Email already exists in the list',
@@ -75,12 +82,12 @@ const CreateUserModal = (props: Props) => {
             message: '',
         })
         dispatch(
-            addUser({
-                id: uuidv4(),
-                name: name.current?.value ?? '',
-                email: email.current?.value ?? '',
-                location: location.current?.value,
-                image: 'https://xsgames.co/randomusers/avatar.php?g=male',
+            updateUser({
+                id: props.user.id,
+                name: name.current?.value ?? props.user.name,
+                email: email.current?.value ?? props.user.email,
+                location: location.current?.value ?? props.user.location,
+                image: props.user.image,
             })
         )
         props.handleClose()
@@ -95,7 +102,7 @@ const CreateUserModal = (props: Props) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Create User
+                    Edit User
                 </Typography>
                 <div
                     style={{
@@ -110,6 +117,7 @@ const CreateUserModal = (props: Props) => {
                         variant="standard"
                         label="Name"
                         error={error.ErrorType === 'name'}
+                        defaultValue={props.user.name}
                     />
                     <TextField
                         inputRef={email}
@@ -117,12 +125,14 @@ const CreateUserModal = (props: Props) => {
                         type={'email'}
                         label="Email"
                         error={error.ErrorType === 'email'}
+                        defaultValue={props.user.email}
                     />
                     <TextField
                         inputRef={location}
                         variant="standard"
                         label="Location"
                         error={error.ErrorType === 'location'}
+                        defaultValue={props.user.location}
                     />
                 </div>
                 {error.ErrorType && (
@@ -139,11 +149,11 @@ const CreateUserModal = (props: Props) => {
                     variant="contained"
                     color="success"
                 >
-                    <Typography>Create User</Typography>
+                    <Typography>Edit User</Typography>
                 </Button>
             </Box>
         </Modal>
     )
 }
 
-export default CreateUserModal
+export default EditUserModal
