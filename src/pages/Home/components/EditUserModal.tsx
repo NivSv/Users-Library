@@ -1,9 +1,8 @@
 import ModalWrapper from '@/components/ModalWrapper'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useRef, useState } from 'react'
-import { updateUser } from '@/redux/usersSlice'
+import { updateUser, User } from '@/redux/usersSlice'
 import { TextField, Typography } from '@mui/material'
-import { User } from '@/interfaces/user.interface'
 import { z, ZodError } from 'zod'
 import { hasZodIssue } from '../../../utils/zod.utils'
 interface Props {
