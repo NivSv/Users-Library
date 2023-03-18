@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material'
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import axios from 'axios'
 import Home from './pages/Home'
-import { useAppDispatch } from './hooks/redux'
+import { useAppDispatch, useAppSelector } from './hooks/redux'
 import { User } from './interfaces/user.interface'
 import { setUsers } from './redux/usersSlice'
 
@@ -19,14 +19,15 @@ const theme = createTheme({
 })
 
 function App() {
+    const users = useAppSelector((state) => state.users)
     const dispatch = useAppDispatch()
-    const { isLoading, data, isError } = useQuery('users', async () => {
+    const { data, isError } = useQuery('users', async () => {
         const foundUsers = await axios('https://randomuser.me/api/?results=10')
         return foundUsers.data.results
     })
 
     useEffect(() => {
-        if (data) {
+        if (data && users.length === 0) {
             const newUsers: Array<User> = data.map((foundUser: any) => {
                 return {
                     id: foundUser.login.uuid,
@@ -37,9 +38,6 @@ function App() {
                 }
             })
             dispatch(setUsers(newUsers))
-        }
-        return () => {
-            dispatch(setUsers([]))
         }
     }, [data])
 
