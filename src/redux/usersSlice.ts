@@ -9,7 +9,7 @@ export const usersSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        set: (state, action: PayloadAction<Array<User>>) => {
+        setUsers: (state, action) => {
             return action.payload
         },
     },
@@ -18,6 +18,6 @@ export const usersSlice = createSlice({
 export const selectUsers = (state: RootState) => state.users
 
 // Action creators are generated for each case reducer function
-export const { set } = usersSlice.actions
+export const { setUsers } = usersSlice.actions
 
 export default usersSlice.reducer
