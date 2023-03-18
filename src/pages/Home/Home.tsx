@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Container from '@mui/material/Container'
 import UsersList from '@/pages/Home/components/UserList/UserList'
-import CreateUserModal from '@/pages/Home/components/CreateUserModal'
+import CreateUserModal from '@/pages/Home/components/UserList/CreateUserModal'
 import Header from './components/Header'
 
 const Home = () => {

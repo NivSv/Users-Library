@@ -1,9 +1,9 @@
 import { TableCell, TableRow } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { User } from '@/redux/usersSlice'
 import MenuListWrapper from '../../../../components/MenuListWrapper'
-import DeleteUserModal from '../DeleteUserModal'
-import EditUserModal from '../EditUserModal'
+import DeleteUserModal from './DeleteUserModal'
+import EditUserModal from './EditUserModal'
 
 interface Props {
     user: User
@@ -62,7 +62,7 @@ const UserListRow = ({ user }: Props) => {
                     <DeleteUserModal
                         isOpen={deleteModalOpen}
                         user={user}
-                        handleClose={() => setEditModalOpen(!editModalOpen)}
+                        handleClose={() => setDeleteModalOpen(!deleteModalOpen)}
                     />
                     <EditUserModal
                         isOpen={editModalOpen}
