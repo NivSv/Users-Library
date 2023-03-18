@@ -133,14 +133,24 @@ const CreateUserModal = (props: Props) => {
                         {error.message}
                     </Typography>
                 )}
-                <Button
-                    onClick={handleSave}
-                    onKeyDown={handleSave}
-                    variant="contained"
-                    color="success"
-                >
-                    <Typography>Create User</Typography>
-                </Button>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <Button
+                        onClick={handleSave}
+                        onKeyDown={handleSave}
+                        variant="contained"
+                        color="success"
+                    >
+                        <Typography>Create</Typography>
+                    </Button>
+                    <Button
+                        onClick={props.handleClose}
+                        onKeyDown={props.handleClose}
+                        variant="contained"
+                        color="warning"
+                    >
+                        <Typography>Cancel</Typography>
+                    </Button>
+                </div>
             </Box>
         </Modal>
     )
