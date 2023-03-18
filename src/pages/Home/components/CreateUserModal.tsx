@@ -13,7 +13,7 @@ interface Props {
 }
 
 const CreateUserModal = (props: Props) => {
-    const users = useAppSelector((state) => state.users)
+    const usersSlice = useAppSelector((state) => state.users)
     const dispatch = useAppDispatch()
     const [error, setError] = useState<ZodError | null>(null)
     const name = useRef<HTMLInputElement>()
@@ -26,7 +26,7 @@ const CreateUserModal = (props: Props) => {
             .string()
             .email()
             .refine((email) => {
-                return !users.find((user) => user.email === email)
+                return !usersSlice.users.find((user) => user.email === email)
             }, 'Email already exists'),
         location: z.string().nonempty(),
     })

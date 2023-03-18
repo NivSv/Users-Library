@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@mui/material'
 import React, { useState } from 'react'
-import { User } from '@/interfaces/user.interface'
+import { User } from '@/redux/usersSlice'
 import MenuListWrapper from '../../../../components/MenuListWrapper'
 import DeleteUserModal from '../DeleteUserModal'
 import EditUserModal from '../EditUserModal'

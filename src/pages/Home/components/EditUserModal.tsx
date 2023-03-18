@@ -13,7 +13,7 @@ interface Props {
 }
 
 const EditUserModal = (props: Props) => {
-    const users = useAppSelector((state) => state.users)
+    const usersSlice = useAppSelector((state) => state.users)
     const dispatch = useAppDispatch()
     const [error, setError] = useState<ZodError | null>(null)
     const name = useRef<HTMLInputElement>()
@@ -27,7 +27,7 @@ const EditUserModal = (props: Props) => {
             .email()
             .refine((email) => {
                 return (
-                    !users.find((user) => user.email === email) ||
+                    !usersSlice.users.find((user) => user.email === email) ||
                     email === props.user.email
                 )
             }, 'Email already exists'),
