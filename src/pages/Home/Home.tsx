@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import Container from '@mui/material/Container'
-import { Button, TextField } from '@mui/material'
-import UsersList from '@/pages/Home/components/UserList'
-import { motion } from 'framer-motion'
-import { fadeIn, textVariant } from '@/utils/motion'
+import UsersList from '@/pages/Home/components/UserList/UserList'
 import CreateUserModal from '@/pages/Home/components/CreateUserModal'
+import Header from './components/Header'
 
 const Home = () => {
     const [addUserModal, setAddUserModal] = useState<boolean>(false)
@@ -20,69 +18,11 @@ const Home = () => {
                 paddingBottom: '2rem',
             }}
         >
-            <motion.h1
-                initial="hidden"
-                whileInView="show"
-                variants={textVariant(null)}
-                style={{
-                    textAlign: 'center',
-                    paddingTop: '1rem',
-                    paddingBottom: '1rem',
-                }}
-            >
-                Users Library
-            </motion.h1>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '2rem',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '2rem',
-                }}
-            >
-                <motion.div
-                    initial="hidden"
-                    whileInView="show"
-                    variants={fadeIn({
-                        delay: 0.5,
-                        duration: 0.5,
-                        direction: 'right',
-                        type: 'spring',
-                    })}
-                >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        sx={{ maxHeight: '35px' }}
-                        onClick={() => {
-                            setAddUserModal(!addUserModal)
-                        }}
-                    >
-                        Add User
-                    </Button>
-                </motion.div>
-                <motion.div
-                    initial="hidden"
-                    whileInView="show"
-                    variants={fadeIn({
-                        delay: 0.5,
-                        duration: 0.5,
-                        direction: 'left',
-                        type: 'spring',
-                    })}
-                >
-                    <TextField
-                        id="standard-basic"
-                        label="Filter"
-                        variant="standard"
-                        onChange={(e) => {
-                            setFilter(e.target.value)
-                        }}
-                    />
-                </motion.div>
-            </div>
+            <Header
+                setAddUserModal={setAddUserModal}
+                setFilter={setFilter}
+                addUserModal={addUserModal}
+            />
             <UsersList filter={filter} />
             <CreateUserModal
                 isOpen={addUserModal}

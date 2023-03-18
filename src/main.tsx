@@ -4,17 +4,15 @@ import App from './App'
 import { store } from './redux/store'
 import { Provider } from 'react-redux'
 import './index.css'
-import { QueryClient, QueryClientProvider } from 'react-query'
-
+import { InitUsers } from './redux/usersSlice'
 // Create a client
-const queryClient = new QueryClient()
+// Init users
+store.dispatch(InitUsers)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <Provider store={store}>
-                <App />
-            </Provider>
-        </QueryClientProvider>
+        <Provider store={store}>
+            <App />
+        </Provider>
     </React.StrictMode>
 )

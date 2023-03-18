@@ -18,10 +18,10 @@ const UserResponseSchema = z.object({
                 city: z.string(),
                 state: z.string(),
                 country: z.string(),
-                postcode: z.number(),
+                postcode: z.union([z.string(), z.number()]),
                 coordinates: z.object({
-                    latitude: z.number(),
-                    longitude: z.number(),
+                    latitude: z.string(),
+                    longitude: z.string(),
                 }),
                 timezone: z.object({
                     offset: z.string(),
@@ -50,7 +50,7 @@ const UserResponseSchema = z.object({
             cell: z.string(),
             id: z.object({
                 name: z.string(),
-                value: z.string(),
+                value: z.union([z.string(), z.null()]),
             }),
             picture: z.object({
                 large: z.string(),
@@ -68,6 +68,6 @@ export const fetchUsers = async () => {
     const foundUsers = await axios<UserResponse>(
         'https://randomuser.me/api/?results=10'
     )
-
+    UserResponseSchema.parse(foundUsers.data)
     return foundUsers.data.results
 }
