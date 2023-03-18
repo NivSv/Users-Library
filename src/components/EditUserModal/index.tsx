@@ -3,8 +3,8 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
-import { addUser, updateUser } from '../../redux/usersSlice'
-import { useEffect, useRef, useState } from 'react'
+import { updateUser } from '../../redux/usersSlice'
+import { useRef, useState } from 'react'
 import { User } from '../../interfaces/user.interface'
 
 interface Props {
