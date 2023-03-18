@@ -6,9 +6,7 @@ import { motion } from 'framer-motion'
 import { fadeIn, textVariant } from '../utils/motion'
 import CreateUserModal from '../components/CreateUserModal'
 
-type Props = {}
-
-const Home = (props: Props) => {
+const Home = () => {
     const [addUserModal, setAddUserModal] = useState<boolean>(false)
 
     return (

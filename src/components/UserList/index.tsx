@@ -50,6 +50,7 @@ const UsersList = () => {
                             </TableCell>
                             <TableCell align="center">
                                 <img
+                                    width={70}
                                     src={user.image}
                                     title={user.name + ' image'}
                                     alt={user.name + ' image'}
