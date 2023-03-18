@@ -1,10 +1,11 @@
 import ModalWrapper from '@/components/ModalWrapper'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useRef, useState } from 'react'
-import { ErrorType } from '@/interfaces/error.interface'
 import { addUser } from '../../../redux/usersSlice'
 import { v4 as uuidv4 } from 'uuid'
 import { TextField, Typography } from '@mui/material'
+import { z, ZodError } from 'zod'
+import { hasZodIssue } from '@/utils/zod.utils'
 
 interface Props {
     isOpen: boolean
@@ -14,55 +15,39 @@ interface Props {
 const CreateUserModal = (props: Props) => {
     const users = useAppSelector((state) => state.users)
     const dispatch = useAppDispatch()
-    const [error, setError] = useState<ErrorType>({
-        ErrorType: null,
-        message: '',
-    })
+    const [error, setError] = useState<ZodError | null>(null)
     const name = useRef<HTMLInputElement>()
     const email = useRef<HTMLInputElement>()
     const location = useRef<HTMLInputElement>()
 
+    const createUserSchema = z.object({
+        name: z.string().min(3),
+        email: z
+            .string()
+            .email()
+            .refine((email) => {
+                return !users.find((user) => user.email === email)
+            }, 'Email already exists'),
+        location: z.string().nonempty(),
+    })
+
     const handleSave = () => {
-        const emailTest =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if ((name.current?.value.length ?? 0) < 3) {
-            setError({
-                ErrorType: 'name',
-                message: 'Name is required min 3 characters',
-            })
-            return
-        }
-        if (!emailTest.test(email.current?.value ?? '')) {
-            setError({
-                ErrorType: 'email',
-                message: 'Email is required',
-            })
-            return
-        }
-        if (!location.current?.value) {
-            setError({
-                ErrorType: 'location',
-                message: 'Location is required',
-            })
-            return
-        }
-        if (users.find((user) => user.email === email.current?.value)) {
-            setError({
-                ErrorType: 'email',
-                message: 'Email already exists in the list',
-            })
-            return
-        }
-        setError({
-            ErrorType: null,
-            message: '',
+        setError(null)
+        const result = createUserSchema.safeParse({
+            name: name.current?.value ?? '',
+            email: email.current?.value ?? '',
+            location: location.current?.value ?? '',
         })
+        if (!result.success) {
+            setError(result.error)
+            return
+        }
         dispatch(
             addUser({
                 id: uuidv4(),
                 name: name.current?.value ?? '',
                 email: email.current?.value ?? '',
-                location: location.current?.value,
+                location: location.current?.value ?? '',
                 image: 'https://xsgames.co/randomusers/avatar.php?g=male',
             })
         )
@@ -96,28 +81,28 @@ const CreateUserModal = (props: Props) => {
                         inputRef={name}
                         variant="standard"
                         label="Name"
-                        error={error.ErrorType === 'name'}
+                        error={hasZodIssue(error, 'name')}
                     />
                     <TextField
                         inputRef={email}
                         variant="standard"
                         type={'email'}
                         label="Email"
-                        error={error.ErrorType === 'email'}
+                        error={hasZodIssue(error, 'email')}
                     />
                     <TextField
                         inputRef={location}
                         variant="standard"
                         label="Location"
-                        error={error.ErrorType === 'location'}
+                        error={hasZodIssue(error, 'location')}
                     />
                 </div>
-                {error.ErrorType && (
+                {error && (
                     <Typography
                         id="modal-modal-description"
                         sx={{ mt: 2, mb: 2, color: 'red' }}
                     >
-                        {error.message}
+                        {error.issues[0].message}
                     </Typography>
                 )}
             </div>
